@@ -2,7 +2,7 @@
 
 This is a fairly simple memory game written to compare the following frameworks
 
-- [ ] react
+- [x] react
 - [ ] vue
 - [ ] angular
 - [ ] svelte
