@@ -5,8 +5,8 @@
   grid-column-gap: 10px;
   grid-row-gap: 10px;
   text-align: center;
-  width: calc(100vw - 60px * 2);
-  height: calc(100vh - 60px * 2);
+  width: 100vw;
+  height: 100vh;
   padding: 60px;
 }
 
