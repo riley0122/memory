@@ -15,6 +15,10 @@ function App() {
   const [flippedCards, setFlippedCards] = React.useState([...Array(cardCount).keys()].map(card => {
     return false;
   }));
+  const [selectedCards, setSelectedCards] = React.useState([] as number[]);
+  const [guessed, setGuessed] = React.useState([...Array(cardCount).keys()].map(card => {
+    return false;
+  }))
 
   useEffect(() => {
     for (let i = 0; i < [...Array(cardCount/2)].length; i++) {
@@ -34,7 +38,22 @@ function App() {
     }
   }, []);
 
+  function checkSelected() {
+    return !!pairs.filter((pair) => {
+      return (pair.firstCard === selectedCards[0] && pair.secondCard === selectedCards[1]) || (pair.firstCard === selectedCards[1] && pair.secondCard === selectedCards[0])
+    })[0];
+  }
+
+  function resetFlippedCards() {
+    setFlippedCards([...Array(cardCount).keys()].map((_, i) => {
+      return guessed[i];
+    }));
+  }
+
   function flipCard(index: number) {
+    let c = selectedCards;
+    c.push(index);
+    setSelectedCards(c);
     setFlippedCards(flippedCards.map((card, i) => {
       if (i === index) {
         return !card;
@@ -42,6 +61,19 @@ function App() {
         return card;
       }
     }));
+    if (selectedCards.length === 2) {
+      if (checkSelected()){
+        let g = guessed;
+        g[selectedCards[0]] = true;
+        g[selectedCards[1]] = true;
+        setGuessed(g);
+        resetFlippedCards();
+      }else {
+        setTimeout(resetFlippedCards, 1500);
+      }
+      setSelectedCards([]);
+      return;
+    }
   }
 
   function getDog(index: number) {
@@ -52,7 +84,7 @@ function App() {
     <div className="App">
       {[...Array(cardCount)].map((_, i) => (
         <div key={i} onClick={() => !flippedCards[i] ? flipCard(i) : {}} className='w-full h-full' >
-          <Card index={i} flip={flippedCards[i]} dog={getDog(i)}/>
+          <Card index={i} flip={flippedCards[i]} dog={getDog(i)} guessed={guessed[i]}/>
         </div>
       ))}
     </div>
