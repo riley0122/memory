@@ -19,6 +19,7 @@ function App() {
   const [guessed, setGuessed] = React.useState([...Array(cardCount).keys()].map(card => {
     return false;
   }))
+  const [SomeCardsAreFlipped, setSomeCardsAreFlipped] = React.useState(false);
 
   useEffect(() => {
     for (let i = 0; i < [...Array(cardCount/2)].length; i++) {
@@ -48,9 +49,14 @@ function App() {
     setFlippedCards([...Array(cardCount).keys()].map((_, i) => {
       return guessed[i];
     }));
+    setSomeCardsAreFlipped(false);
   }
 
   function flipCard(index: number) {
+    if (SomeCardsAreFlipped) {
+      return;
+    }
+
     let c = selectedCards;
     c.push(index);
     setSelectedCards(c);
@@ -62,6 +68,7 @@ function App() {
       }
     }));
     if (selectedCards.length === 2) {
+      setSomeCardsAreFlipped(true);
       if (checkSelected()){
         let g = guessed;
         g[selectedCards[0]] = true;
